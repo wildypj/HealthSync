@@ -1,0 +1,57 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/patient
+    username: postgres
+    password: 'Enter your password'
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+
+  application:
+    name: patient-service
+
+
+#Eureka Config
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+#Change port to 8081 if run into issues
+server:
+  port: 8084
+
+#Zipkin
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+
+#H2 Memory Db
+#  h2:
+#    console:
+#      enabled: true
+#    datasource:
+#      url: jdbc:h2:mem:test
+#    jpa:
+#      show-sql: true
+#      properties:
+#        hibernate:
+#          format_sql: true
+#      generate-ddl: true
+#      hibernate:
+#        ddl-auto: create-drop
+
+
+
+
+

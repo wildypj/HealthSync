@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: notification-service
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: "yourEmail"
+#    password: "YourPassword"
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: "AppointmentEventDTO:com.wildy.notification.payload.AppointmentEventDTO"
+    topic-appointment: appointment-events-topic  # Topic name for appointment events
+
+
+# Eureka Configuration
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8086
+
+#zipkin
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0

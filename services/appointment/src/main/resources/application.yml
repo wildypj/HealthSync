@@ -1,0 +1,70 @@
+spring:
+  h2:
+    console:
+      enabled: true
+    datasource:
+      url: jdbc:h2:mem:test
+    jpa:
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+      generate-ddl: true
+      hibernate:
+        ddl-auto: create-drop
+
+  application:
+    name: appointment-service
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: "AppointmentEventDTO:com.wildy.appointment.appointment.payload.AppointmentEventDTO"
+    topic-appointment: appointment-events-topic # Topic name for appointment events Producer
+
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: doctor-schedule-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: "ScheduleEventDTO:com.wildy.appointment.appointment.payload.ScheduleEventDTO"
+    topic-schedule: doctor-schedule-topic # Topic name for the consumer
+
+
+#Eureka Config
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8083
+
+# Zipkin Config
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+#Postgres
+#  datasource:
+#    url: jdbc:postgresql://localhost:5433/healthsync_db
+#    username: user
+#    password: DateGetInto99$
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: create-drop

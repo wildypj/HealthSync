@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: health-gateway
+
+#Gateway
+  cloud:
+    gateway:
+      routes:
+        - id: appointment_service
+          uri: lb://APPOINTMENT-SERVICE
+          predicates: Path=/appointments/**
+
+        - id: doctor_service
+          uri: lb://DOCTOR-SERVICE
+          predicates:
+            - Path=/api/doctors
+            - Path=/api/{doctorId}/home-addresses/**
+            - Path=/api/{doctorId}/schedule/**
+
+        - id: patient_service
+          uri: lb://PATIENT-SERVICE
+          predicates:
+            - Path=/api/v1/patients/**
+            - Path=/api/addresses/**
+
+        - id: appointment_service
+          uri: lb:://APPOINTMENT-SERVICE
+          predicates:
+            - Path=/api/v1/appointments
+
+        - id: eureka-server
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/main
+          filters:
+            - SetPath=/
+
+        - id: eureka-server-static
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/**
+
+#Eureka Config
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8085
+
+#zipkin
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
